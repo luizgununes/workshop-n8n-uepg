@@ -1,8 +1,16 @@
 {
-  "name": "Workshop de n8n",
+  "name": "n8n + EvolutionAPI Workshop",
   "dockerComposeFile": ["../docker-compose.yml"],
   "service": "devhost",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "version": "latest",
+      "moby": false
+    }
+  },
+
   "forwardPorts": [5678, 8080],
   "portsAttributes": {
     "5678": { "label": "n8n", "onAutoForward": "openBrowser" },
