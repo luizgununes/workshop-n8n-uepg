@@ -1,0 +1,38 @@
+services:
+  devhost:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    volumes:
+      - .:/workspaces/app
+    command: sleep infinity
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: n8n
+      POSTGRES_PASSWORD: n8n
+      POSTGRES_DB: n8n
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  n8n:
+    image: n8nio/n8n:latest
+    env_file: n8n.env
+    depends_on:
+      - db
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    restart: unless-stopped
+
+  evolution:
+    image: atendai/evolution-api:latest
+    env_file: evolution.env
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  dbdata:
+  n8n_data:

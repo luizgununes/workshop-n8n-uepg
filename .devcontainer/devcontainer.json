@@ -1,0 +1,21 @@
+{
+  "name": "Workshop de n8n",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "devhost",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "forwardPorts": [5678, 8080],
+  "portsAttributes": {
+    "5678": { "label": "n8n", "onAutoForward": "openBrowser" },
+    "8080": { "label": "Evolution API", "onAutoForward": "openBrowser" }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "esbenp.prettier-vscode",
+        "redhat.vscode-yaml"
+      ]
+    }
+  }
+}
