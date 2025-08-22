@@ -41,8 +41,11 @@ services:
       - N8N_EDITOR_BASE_URL=
       - GENERIC_TIMEZONE=America/Sao_Paulo
       
-      # Configurações para aceitar requisições do Codespace
+      # Configurações específicas para Codespace
       - N8N_CORS_ORIGIN=*
+      - N8N_SECURE_COOKIE=false
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
+      - N8N_DISABLE_PRODUCTION_MAIN_PROCESS=true
       - N8N_SECURE_COOKIE=false
       
       # Configurações do banco
