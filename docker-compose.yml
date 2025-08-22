@@ -1,17 +1,6 @@
 version: '3.8'
 
 services:
-  # Workspace container para o Codespace
-  workspace:
-    image: mcr.microsoft.com/devcontainers/universal:2
-    command: sleep infinity
-    volumes:
-      - ../..:/workspaces:cached
-    environment:
-      - SHELL=/bin/zsh
-    networks:
-      - workshop-network
-
   # PostgreSQL para N8N
   postgres:
     image: postgres:15
@@ -76,14 +65,13 @@ services:
       
     volumes:
       - n8n_data:/home/node/.n8n
-      - ./n8n/workflows:/home/node/.n8n/workflows
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - workshop-network
 
-  # EvolutionAPI
+  # EvolutionAPI - OBRIGATÓRIO
   evolution-api:
     image: atendai/evolution-api:latest
     restart: unless-stopped
@@ -156,7 +144,7 @@ services:
     networks:
       - workshop-network
 
-  # EvolutionAPI Manager (Interface gráfica)
+  # EvolutionAPI Manager (Interface gráfica) - OBRIGATÓRIO
   evolution-manager:
     image: atendai/evolution-manager:latest
     restart: unless-stopped
