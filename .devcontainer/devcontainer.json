@@ -1,8 +1,14 @@
 {
   "name": "Workshop N8N + EvolutionAPI",
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "enableNonRootDocker": "true"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    }
   },
   "forwardPorts": [5678, 8080, 8081],
   "portsAttributes": {
@@ -16,7 +22,7 @@
       "label": "EvolutionAPI Manager"
     }
   },
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postCreateCommand": "bash troubleshoot.sh",
   "customizations": {
     "vscode": {
       "extensions": [

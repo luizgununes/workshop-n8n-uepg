@@ -1,9 +1,55 @@
 #!/bin/bash
 
-echo "� Script de Configuração - Workshop N8N + EvolutionAPI"
+echo "🛠️ Script de Configuração - Workshop N8N + EvolutionAPI"
 echo "========================================================"
 echo "⚠️  AMBOS N8N E EVOLUTIONAPI SÃO OBRIGATÓRIOS!"
 echo ""
+
+# Verificar se Docker está instalado e funcionando
+echo "🐳 Verificando Docker..."
+if ! command -v docker &> /dev/null; then
+    echo "❌ Docker não encontrado. Aguardando instalação..."
+    
+    # Aguardar o Docker ser instalado pelo devcontainer feature
+    for i in {1..30}; do
+        if command -v docker &> /dev/null; then
+            echo "✅ Docker encontrado após aguardar"
+            break
+        fi
+        echo "⏳ Aguardando Docker ser instalado... ($i/30)"
+        sleep 2
+    done
+    
+    if ! command -v docker &> /dev/null; then
+        echo "❌ ERRO: Docker não pôde ser instalado"
+        echo "📞 SOLICITE AJUDA AO INSTRUTOR!"
+        exit 1
+    fi
+fi
+
+# Verificar se Docker daemon está rodando
+echo "🔍 Verificando Docker daemon..."
+for i in {1..15}; do
+    if docker info >/dev/null 2>&1; then
+        echo "✅ Docker daemon está rodando"
+        break
+    else
+        echo "⏳ Aguardando Docker daemon... ($i/15)"
+        sleep 3
+    fi
+done
+
+if ! docker info >/dev/null 2>&1; then
+    echo "❌ ERRO: Docker daemon não está rodando"
+    echo "📞 SOLICITE AJUDA AO INSTRUTOR!"
+    exit 1
+fi
+
+# Verificar se docker-compose está disponível
+if ! command -v docker-compose &> /dev/null; then
+    echo "🔍 docker-compose não encontrado, usando docker compose"
+    alias docker-compose='docker compose'
+fi
 
 # Função para verificar se uma imagem Docker existe
 check_image() {
@@ -31,7 +77,7 @@ test_connectivity() {
 
 # Parar serviços existentes
 echo "🛑 Parando serviços existentes..."
-docker-compose down 2>/dev/null || true
+docker-compose down 2>/dev/null || docker compose down 2>/dev/null || true
 
 # Testar conectividade
 if ! test_connectivity; then
@@ -88,7 +134,11 @@ echo "✅ Todas as imagens obrigatórias estão disponíveis!"
 # Iniciar serviços
 echo ""
 echo "🚀 Iniciando TODOS os serviços obrigatórios..."
-docker-compose up -d
+if command -v docker-compose &> /dev/null; then
+    docker-compose up -d
+else
+    docker compose up -d
+fi
 
 # Aguardar serviços
 echo "⏳ Aguardando serviços ficarem prontos..."
@@ -97,7 +147,11 @@ sleep 45
 # Verificar status
 echo ""
 echo "📊 Status dos serviços:"
-docker-compose ps
+if command -v docker-compose &> /dev/null; then
+    docker-compose ps
+else
+    docker compose ps
+fi
 
 # Testar endpoints OBRIGATÓRIOS
 echo ""
@@ -105,6 +159,7 @@ echo "🔍 Testando endpoints obrigatórios..."
 
 # Testar N8N
 echo "🧪 Testando N8N..."
+N8N_OK=false
 for i in {1..10}; do
     if curl -s --max-time 10 http://localhost:5678 >/dev/null; then
         echo "✅ N8N está funcionando em http://localhost:5678"
@@ -118,6 +173,7 @@ done
 
 # Testar EvolutionAPI
 echo "🧪 Testando EvolutionAPI..."
+EVOLUTION_OK=false
 for i in {1..10}; do
     if curl -s --max-time 10 http://localhost:8080 >/dev/null; then
         echo "✅ EvolutionAPI está funcionando em http://localhost:8080"
@@ -136,9 +192,17 @@ if [ "$N8N_OK" != true ] || [ "$EVOLUTION_OK" != true ]; then
     echo ""
     echo "🔍 Logs para diagnóstico:"
     echo "--- N8N ---"
-    docker-compose logs --tail=10 n8n
+    if command -v docker-compose &> /dev/null; then
+        docker-compose logs --tail=10 n8n
+    else
+        docker compose logs --tail=10 n8n
+    fi
     echo "--- EvolutionAPI ---"
-    docker-compose logs --tail=10 evolution-api
+    if command -v docker-compose &> /dev/null; then
+        docker-compose logs --tail=10 evolution-api
+    else
+        docker compose logs --tail=10 evolution-api
+    fi
     echo ""
     echo "📞 SOLICITE AJUDA AO INSTRUTOR!"
     exit 1
