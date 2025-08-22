@@ -37,11 +37,12 @@ services:
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
       - NODE_ENV=production
-      - WEBHOOK_URL=http://localhost:5678/
+      - WEBHOOK_URL=https://${CODESPACE_NAME}-5678.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}/
+      - N8N_EDITOR_BASE_URL=https://${CODESPACE_NAME}-5678.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}/
       - GENERIC_TIMEZONE=America/Sao_Paulo
       
       # Configuração para Codespaces - aceitar qualquer origin
-      - N8N_DISABLE_UI_HTTPS_VALIDATION=true
+      - N8N_ALLOWED_ORIGINS=*
       
       # Configurações do banco
       - DB_TYPE=postgresdb
