@@ -83,23 +83,22 @@ services:
     networks:
       - workshop-network
 
-  # EvolutionAPI
+  # EvolutionAPI usando a imagem oficial mais recente
   evolution-api:
-    image: atendai/evolution-api:latest
+    image: evolution-api/evolution-api:latest
     restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
       # Configurações básicas
-      - SERVER_TYPE=http
-      - SERVER_PORT=8080
-      - SERVER_URL=http://localhost:8080
+      - PORT=8080
+      - BASE_URL=http://localhost:8080
       
       # Configurações do banco
       - DATABASE_ENABLED=true
       - DATABASE_CONNECTION_URI=postgresql://evolution:evolution@postgres-evolution:5432/evolution
       
-      # Configurações Redis
+      # Configurações Redis  
       - REDIS_ENABLED=true
       - REDIS_URI=redis://redis-evolution:6379
       
@@ -121,9 +120,6 @@ services:
       # Configurações de log
       - LOG_LEVEL=ERROR
       - LOG_COLOR=true
-      
-      # Desabilitar algumas verificações para workshop
-      - DEL_INSTANCE=false
       
     volumes:
       - evolution_instances:/evolution/instances
@@ -153,19 +149,6 @@ services:
     restart: unless-stopped
     volumes:
       - redis_evolution_data:/data
-    networks:
-      - workshop-network
-
-  # EvolutionAPI Manager (Interface gráfica)
-  evolution-manager:
-    image: atendai/evolution-manager:latest
-    restart: unless-stopped
-    ports:
-      - "8081:3000"
-    environment:
-      - NEXT_PUBLIC_EVOLUTION_API_URL=http://localhost:8080
-    depends_on:
-      - evolution-api
     networks:
       - workshop-network
 

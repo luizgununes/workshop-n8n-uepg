@@ -81,6 +81,28 @@ workshop-n8n-uepg/
 
 ## 🔧 Solução de Problemas
 
+### Configurações Alternativas
+
+Este repositório inclui múltiplas configurações para máxima compatibilidade:
+
+- **`docker-compose.yml`**: Configuração completa com N8N + EvolutionAPI
+- **`docker-compose.simple.yml`**: Configuração simplificada apenas com N8N
+- **`troubleshoot.sh`**: Script automático que escolhe a melhor configuração
+
+### Script de Troubleshooting
+
+Se houver problemas, execute no terminal do Codespace:
+
+```bash
+./troubleshoot.sh
+```
+
+Este script irá:
+- Verificar conectividade
+- Testar disponibilidade das imagens Docker
+- Escolher automaticamente a melhor configuração
+- Iniciar os serviços apropriados
+
 ### Problema: Portas não estão acessíveis
 **Solução**: No Codespace, verifique se as portas estão sendo encaminhadas corretamente na aba "Ports".
 
@@ -88,7 +110,10 @@ workshop-n8n-uepg/
 **Solução**: Verifique se o container está rodando com `docker ps` e reinicie se necessário.
 
 ### Problema: EvolutionAPI não conecta
-**Solução**: Verifique os logs com `docker-compose logs evolution-api`.
+**Solução**: Execute `./troubleshoot.sh` que irá usar uma configuração alternativa se necessário.
+
+### Problema: Imagens Docker não são encontradas
+**Solução**: O script de troubleshooting irá automaticamente usar configurações alternativas.
 
 ## 📞 Suporte
 
