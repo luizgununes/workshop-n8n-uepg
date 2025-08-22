@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL para N8N
   postgres:
@@ -85,6 +83,7 @@ services:
       
       # Configurações do banco
       - DATABASE_ENABLED=true
+      - DATABASE_PROVIDER=postgresql
       - DATABASE_CONNECTION_URI=postgresql://evolution:evolution@postgres-evolution:5432/evolution
       
       # Configurações Redis
