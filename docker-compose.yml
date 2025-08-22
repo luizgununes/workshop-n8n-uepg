@@ -44,6 +44,11 @@ services:
       # Configurações específicas para Codespace
       - N8N_SECURE_COOKIE=false
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
+      - N8N_SKIP_WEBHOOK_DEREGISTRATION_SHUTDOWN=true
+      - NODE_OPTIONS=--max-old-space-size=2048
+      
+      # Desabilitar validações de origem para workshop
+      - N8N_DISABLE_UI=false
       
       # Configurações específicas para Codespace
       - N8N_CORS_ORIGIN=*
