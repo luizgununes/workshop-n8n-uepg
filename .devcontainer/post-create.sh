@@ -1,17 +1,38 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
 
-# 1) Compose plugin (docker compose)
-if ! docker compose version >/dev/null 2>&1; then
-  sudo apt-get update -y
-  sudo apt-get install -y docker-compose-plugin
-fi
+echo "🚀 Configurando ambiente do workshop..."
 
-# 2) Garantir .envs presentes
-cp -n n8n.env.example n8n.env || true
-cp -n evolution.env.example evolution.env || true
+# Aguardar um momento para garantir que tudo esteja pronto
+sleep 5
 
-# 3) Subir os serviços
-docker compose pull
-docker compose up -d
-docker compose ps
+# Iniciar os serviços
+echo "📦 Iniciando serviços Docker..."
+docker-compose up -d
+
+# Aguardar os serviços estarem prontos
+echo "⏳ Aguardando serviços ficarem prontos..."
+sleep 30
+
+# Verificar se os serviços estão rodando
+echo "🔍 Verificando status dos serviços..."
+docker-compose ps
+
+# Aguardar um pouco mais para garantir que tudo esteja estável
+sleep 15
+
+echo "✅ Ambiente configurado com sucesso!"
+echo ""
+echo "🌐 Acesse as aplicações:"
+echo "  • N8N: http://localhost:5678"
+echo "  • EvolutionAPI: http://localhost:8080"
+echo "  • EvolutionAPI Manager: http://localhost:8081"
+echo ""
+echo "🔑 Credenciais N8N:"
+echo "  • Email: admin@workshop.com"
+echo "  • Senha: workshop123"
+echo ""
+echo "🔑 EvolutionAPI:"
+echo "  • API Key: workshop-evolution-key"
+echo "  • Global API Key: global-workshop-key"
+echo ""
+echo "📚 Consulte o README.md para mais informações!"
