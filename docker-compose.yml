@@ -35,10 +35,10 @@ services:
     environment:
       - N8N_HOST=0.0.0.0
       - N8N_PORT=5678
-      - N8N_PROTOCOL=http
+      - N8N_PROTOCOL=https
       - NODE_ENV=development
-      - WEBHOOK_URL=http://localhost:5678/
-      - N8N_EDITOR_BASE_URL=
+      - WEBHOOK_URL=https://fuzzy-space-chainsaw-v646p9vq7wg3x665-5678.app.github.dev/
+      - N8N_EDITOR_BASE_URL=https://fuzzy-space-chainsaw-v646p9vq7wg3x665-5678.app.github.dev/
       - GENERIC_TIMEZONE=America/Sao_Paulo
       
       # Configurações específicas para Codespace
