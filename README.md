@@ -14,10 +14,11 @@ Este repositório contém um ambiente completo para o workshop de automações c
 
 ## ▶️ Como usar no Codespace
 
-### 🔧 Configuração Automática
+### 🔧 Configuração Manual
 
 1. Abra este repositório no GitHub Codespaces
-2. Execute o script de configuração (executado automaticamente):
+2. Aguarde o Codespace ficar totalmente pronto
+3. Execute o script de configuração:
    ```bash
    ./troubleshoot.sh
    ```
@@ -25,7 +26,7 @@ Este repositório contém um ambiente completo para o workshop de automações c
 O script irá:
 - Detectar automaticamente o nome do Codespace
 - Substituir `${CODESPACE_NAME}` pelos valores corretos
-- Configurar e iniciar todos os serviços
+- Configurar e iniciar todos os serviços Docker
 
 ### 🌐 Acessos (URLs Dinâmicas)
 
