@@ -2,8 +2,30 @@
 
 echo "🛠️ Script de Configuração - Workshop N8N + EvolutionAPI"
 echo "========================================================"
-echo "⚠️  AMBOS N8N E EVOLUTIONAPI SÃO OBRIGATÓRIOS!"
 echo ""
+
+# Configurar variável CODESPACE_NAME automaticamente
+if [ -n "$CODESPACE_NAME" ]; then
+    echo "🔧 GitHub Codespace detectado: $CODESPACE_NAME"
+    echo "📝 Configurando variáveis de ambiente..."
+    
+    # Substitui CODESPACE_NAME no docker-compose.yml
+    if [ -f "docker-compose.yml" ] && grep -q "\${CODESPACE_NAME}" docker-compose.yml; then
+        sed -i "s/\${CODESPACE_NAME}/$CODESPACE_NAME/g" docker-compose.yml
+        echo "✅ docker-compose.yml configurado com CODESPACE_NAME"
+    fi
+    
+    # Substitui CODESPACE_NAME no .env
+    if [ -f ".env" ] && grep -q "\${CODESPACE_NAME}" .env; then
+        sed -i "s/\${CODESPACE_NAME}/$CODESPACE_NAME/g" .env
+        echo "✅ .env configurado com CODESPACE_NAME"
+    fi
+    
+    echo ""
+else
+    echo "⚠️ CODESPACE_NAME não detectado (executando localmente)"
+    echo ""
+fi
 
 # Verificar se Docker está instalado e funcionando
 echo "🐳 Verificando Docker..."
@@ -22,7 +44,6 @@ if ! command -v docker &> /dev/null; then
     
     if ! command -v docker &> /dev/null; then
         echo "❌ ERRO: Docker não pôde ser instalado"
-        echo "📞 SOLICITE AJUDA AO INSTRUTOR!"
         exit 1
     fi
 fi
@@ -40,8 +61,7 @@ for i in {1..15}; do
 done
 
 if ! docker info >/dev/null 2>&1; then
-    echo "❌ ERRO: Docker daemon não está rodando"
-    echo "📞 SOLICITE AJUDA AO INSTRUTOR!"
+    echo "❌ ERRO: Docker daemon não está rodando!"
     exit 1
 fi
 
@@ -83,7 +103,6 @@ docker-compose down 2>/dev/null || docker compose down 2>/dev/null || true
 if ! test_connectivity; then
     echo ""
     echo "❌ FALHA CRÍTICA: Sem conectividade com Docker Hub"
-    echo "📞 SOLICITE AJUDA AO INSTRUTOR!"
     exit 1
 fi
 
@@ -122,9 +141,7 @@ if [ "$IMAGES_OK" != true ]; then
     echo "🔧 Possíveis soluções:"
     echo "   1. Verificar conectividade com internet"
     echo "   2. Aguardar alguns minutos e tentar novamente"
-    echo "   3. Solicitar ajuda ao instrutor"
     echo ""
-    echo "📞 SOLICITE AJUDA AO INSTRUTOR!"
     exit 1
 fi
 
@@ -204,17 +221,23 @@ if [ "$N8N_OK" != true ] || [ "$EVOLUTION_OK" != true ]; then
         docker compose logs --tail=10 evolution-api
     fi
     echo ""
-    echo "📞 SOLICITE AJUDA AO INSTRUTOR!"
     exit 1
 fi
 
 echo ""
 echo "🎉 CONFIGURAÇÃO COMPLETA E FUNCIONANDO!"
 echo ""
-echo "🌐 Acessos disponíveis:"
-echo "  • N8N: http://localhost:5678"
-echo "  • EvolutionAPI: http://localhost:8080"
-echo "  • EvolutionAPI Manager: http://localhost:8081"
+if [ -n "$CODESPACE_NAME" ]; then
+    echo "🌐 Acessos disponíveis (GitHub Codespace):"
+    echo "  • N8N: https://$CODESPACE_NAME-5678.app.github.dev"
+    echo "  • EvolutionAPI: https://$CODESPACE_NAME-8080.app.github.dev"
+    echo "  • EvolutionAPI Manager: https://$CODESPACE_NAME-8081.app.github.dev"
+else
+    echo "🌐 Acessos disponíveis (Local):"
+    echo "  • N8N: http://localhost:5678"
+    echo "  • EvolutionAPI: http://localhost:8080"
+    echo "  • EvolutionAPI Manager: http://localhost:8081"
+fi
 echo ""
 echo "🔑 Credenciais N8N:"
 echo "  • Email: admin@workshop.com"

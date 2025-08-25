@@ -1,5 +1,4 @@
 services:
-  # PostgreSQL para N8N
   postgres:
     image: postgres:15
     restart: unless-stopped
@@ -14,12 +13,11 @@ services:
     networks:
       - workshop-network
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -h localhost -U n8n']
+      test: ["CMD-SHELL", "pg_isready -h localhost -U n8n"]
       interval: 5s
       timeout: 5s
       retries: 10
 
-  # Redis para cache e sessões
   redis:
     image: redis:7-alpine
     restart: unless-stopped
@@ -28,7 +26,7 @@ services:
     networks:
       - workshop-network
 
-  # N8N
+  # n8n
   n8n:
     image: n8nio/n8n:latest
     restart: unless-stopped
@@ -39,54 +37,35 @@ services:
       - N8N_PORT=5678
       - N8N_PROTOCOL=https
       - NODE_ENV=development
-      - WEBHOOK_URL=https://fuzzy-space-chainsaw-v646p9vq7wg3x665-5678.app.github.dev/
-      - N8N_EDITOR_BASE_URL=https://fuzzy-space-chainsaw-v646p9vq7wg3x665-5678.app.github.dev/
+      - WEBHOOK_URL=https://${CODESPACE_NAME}-5678.app.github.dev/
+      - N8N_EDITOR_BASE_URL=https://${CODESPACE_NAME}-5678.app.github.dev/
       - GENERIC_TIMEZONE=America/Sao_Paulo
-      
-      # Configurações específicas para Codespace
       - N8N_SECURE_COOKIE=false
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
       - N8N_SKIP_WEBHOOK_DEREGISTRATION_SHUTDOWN=true
       - NODE_OPTIONS=--max-old-space-size=2048
-      
-      # Desabilitar validações de origem para workshop
       - N8N_DISABLE_UI=false
-      
-      # Configurações específicas para Codespace
       - N8N_CORS_ORIGIN=*
-      - N8N_SECURE_COOKIE=false
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
       - N8N_DISABLE_PRODUCTION_MAIN_PROCESS=true
-      - N8N_SECURE_COOKIE=false
-      
-      # Configurações do banco
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
       - DB_POSTGRESDB_PORT=5432
       - DB_POSTGRESDB_DATABASE=n8n
       - DB_POSTGRESDB_USER=n8n
       - DB_POSTGRESDB_PASSWORD=n8n
-      
-      # Usuário padrão
       - N8N_USER_MANAGEMENT_DISABLED=false
       - N8N_OWNER_EMAIL=admin@workshop.com
       - N8N_OWNER_PASSWORD=workshop123
-      
-      # Configurações de segurança para workshop
-      - N8N_SECURE_COOKIE=false
       - N8N_USER_MANAGEMENT_JWT_SECRET=workshop-jwt-secret
-      
-      # Configurações para Codespaces (WebSocket stability)
       - N8N_PUSH_BACKEND=websocket
       - N8N_DIAGNOSTICS_ENABLED=false
       - N8N_VERSION_NOTIFICATIONS_ENABLED=false
       - N8N_TEMPLATES_ENABLED=false
       - N8N_HIRING_BANNER_ENABLED=false
-      
-      # Configurações de execução
       - EXECUTIONS_TIMEOUT=3600
       - EXECUTIONS_TIMEOUT_MAX=7200
-      
+
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
@@ -95,7 +74,6 @@ services:
     networks:
       - workshop-network
 
-  # EvolutionAPI - OBRIGATÓRIO
   evolution-api:
     image: atendai/evolution-api:latest
     restart: unless-stopped
@@ -103,7 +81,7 @@ services:
       - "8080:8080"
     env_file:
       - .env
-      
+
     volumes:
       - evolution_instances:/evolution/instances
       - evolution_store:/evolution/store
@@ -113,7 +91,6 @@ services:
     networks:
       - workshop-network
 
-  # PostgreSQL para EvolutionAPI
   postgres-evolution:
     image: postgres:15
     restart: unless-stopped
@@ -126,7 +103,6 @@ services:
     networks:
       - workshop-network
 
-  # Redis para EvolutionAPI
   redis-evolution:
     image: redis:7-alpine
     restart: unless-stopped
@@ -135,7 +111,6 @@ services:
     networks:
       - workshop-network
 
-  # EvolutionAPI Manager (Interface gráfica) - OBRIGATÓRIO
   evolution-manager:
     image: atendai/evolution-manager:latest
     restart: unless-stopped

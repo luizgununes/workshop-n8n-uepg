@@ -14,16 +14,26 @@ Este repositório contém um ambiente completo para o workshop de automações c
 
 ## ▶️ Como usar no Codespace
 
+### 🔧 Configuração Automática
+
 1. Abra este repositório no GitHub Codespaces
-2. Aguarde a configuração automática (pode levar alguns minutos)
-3. O script de configuração rodará automaticamente
-4. Quando finalizado, acesse os serviços:
+2. Execute o script de configuração (executado automaticamente):
+   ```bash
+   ./troubleshoot.sh
+   ```
 
-### 🌐 Acessos
+O script irá:
+- Detectar automaticamente o nome do Codespace
+- Substituir `${CODESPACE_NAME}` pelos valores corretos
+- Configurar e iniciar todos os serviços
 
-- **N8N**: http://localhost:5678
-- **EvolutionAPI**: http://localhost:8080  
-- **EvolutionAPI Manager**: http://localhost:8081
+### 🌐 Acessos (URLs Dinâmicas)
+
+As URLs são geradas automaticamente baseadas no nome do seu Codespace:
+
+- **N8N**: `https://{CODESPACE_NAME}-5678.app.github.dev`
+- **EvolutionAPI**: `https://{CODESPACE_NAME}-8080.app.github.dev`  
+- **EvolutionAPI Manager**: `https://{CODESPACE_NAME}-8081.app.github.dev`
 
 ### 🔑 Credenciais
 
@@ -39,7 +49,7 @@ Este repositório contém um ambiente completo para o workshop de automações c
 
 Se algo não funcionar:
 
-1. Execute o script de configuração manualmente:
+1. Execute o script de troubleshooting:
    ```bash
    ./troubleshoot.sh
    ```
@@ -49,8 +59,11 @@ Se algo não funcionar:
    docker compose logs
    ```
 
-3. Solicite ajuda ao instrutor! 😊
+3. Reconfigure as URLs dinâmicas:
+   ```bash
+   Se algo não funcionar:
 
----
-
-**Feito para o Workshop UEPG**
+```bash
+./troubleshoot.sh
+```
+   ```
