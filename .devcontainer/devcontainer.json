@@ -25,7 +25,8 @@
       "label": "PostgreSQL"
     }
   },
-  "postCreateCommand": "bash troubleshoot.sh",
+  "postCreateCommand": "chmod +x setup-env.sh troubleshoot.sh && ./setup-env.sh",
+  "postStartCommand": "./troubleshoot.sh",
   "customizations": {
     "vscode": {
       "extensions": [

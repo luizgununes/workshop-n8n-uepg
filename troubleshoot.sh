@@ -4,26 +4,26 @@ echo "🛠️ Script de Configuração - Workshop N8N + EvolutionAPI"
 echo "========================================================"
 echo ""
 
-# Configurar variável CODESPACE_NAME automaticamente
+# Mostrar informações do ambiente
 if [ -n "$CODESPACE_NAME" ]; then
     echo "🔧 GitHub Codespace detectado: $CODESPACE_NAME"
-    echo "📝 Configurando variáveis de ambiente..."
+    echo "📝 Verificando se variáveis foram configuradas..."
     
-    # Substitui CODESPACE_NAME no docker-compose.yml
-    if [ -f "docker-compose.yml" ] && grep -q "\${CODESPACE_NAME}" docker-compose.yml; then
-        sed -i "s/\${CODESPACE_NAME}/$CODESPACE_NAME/g" docker-compose.yml
-        echo "✅ docker-compose.yml configurado com CODESPACE_NAME"
+    if grep -q "$CODESPACE_NAME" docker-compose.yml 2>/dev/null; then
+        echo "✅ docker-compose.yml já configurado"
+    else
+        echo "⚠️ docker-compose.yml pode não estar configurado"
     fi
     
-    # Substitui CODESPACE_NAME no .env
-    if [ -f ".env" ] && grep -q "\${CODESPACE_NAME}" .env; then
-        sed -i "s/\${CODESPACE_NAME}/$CODESPACE_NAME/g" .env
-        echo "✅ .env configurado com CODESPACE_NAME"
+    if grep -q "$CODESPACE_NAME" .env 2>/dev/null; then
+        echo "✅ .env já configurado"
+    else
+        echo "⚠️ .env pode não estar configurado"
     fi
     
     echo ""
 else
-    echo "⚠️ CODESPACE_NAME não detectado (executando localmente)"
+    echo "⚠️ Executando localmente (CODESPACE_NAME não detectado)"
     echo ""
 fi
 
